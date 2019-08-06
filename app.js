@@ -4318,7 +4318,7 @@ var author$project$Main$NotMoving = 2;
 var author$project$Main$RightPaddle = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$Main$initBall = {I: 4, p: 10, R: 2, f: 250, a: 250};
+var author$project$Main$initBall = {t: 4, p: 10, R: 2, f: 250, a: 250};
 var author$project$Main$initPaddle = function (initialX) {
 	return {s: 50, S: 10, f: initialX, a: 225};
 };
@@ -4803,14 +4803,14 @@ var author$project$Main$init = function (_n0) {
 	return _Utils_Tuple2(
 		{
 			j: author$project$Main$initBall,
-			H: author$project$Main$NoWinner,
-			z: author$project$Main$LeftPaddle(
+			I: author$project$Main$NoWinner,
+			A: author$project$Main$LeftPaddle(
 				author$project$Main$initPaddle(10)),
-			t: 2,
-			C: author$project$Main$RightPaddle(
+			u: 2,
+			D: author$project$Main$RightPaddle(
 				author$project$Main$initPaddle(480)),
-			w: 2,
-			D: {J: 0, L: 0}
+			x: 2,
+			E: {J: 0, L: 0}
 		},
 		elm$core$Platform$Cmd$none);
 };
@@ -5691,7 +5691,7 @@ var elm$browser$Browser$Events$onKeyUp = A2(elm$browser$Browser$Events$on, 0, 'k
 var elm$core$Platform$Sub$batch = _Platform_batch;
 var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$subscriptions = function (model) {
-	var _n0 = model.H;
+	var _n0 = model.I;
 	if (!_n0.$) {
 		return elm$core$Platform$Sub$batch(
 			_List_fromArray(
@@ -5725,12 +5725,12 @@ var author$project$Main$shouldBallBounce = F2(
 			var y = paddle.a.a;
 			var width = paddle.a.S;
 			var height = paddle.a.s;
-			return (_Utils_cmp(ball.f - ball.p, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && (_Utils_cmp(ball.a, y + height) < 1));
+			return (_Utils_cmp(ball.f - ball.p, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.t < 0)));
 		} else {
 			var x = paddle.a.f;
 			var y = paddle.a.a;
 			var height = paddle.a.s;
-			return (_Utils_cmp(ball.f + ball.p, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && (_Utils_cmp(ball.a, y + height) < 1));
+			return (_Utils_cmp(ball.f + ball.p, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.t > 0)));
 		}
 	});
 var author$project$Main$shouldBallBounceVertically = function (ball) {
@@ -5796,23 +5796,23 @@ var author$project$Main$update = F2(
 		switch (msg.$) {
 			case 0:
 				var timeDelta = msg.a;
-				var updatedRightPaddle = A2(author$project$Main$updatePaddle, model.w, model.C);
-				var updatedLeftPaddle = A2(author$project$Main$updatePaddle, model.t, model.z);
+				var updatedRightPaddle = A2(author$project$Main$updatePaddle, model.x, model.D);
+				var updatedLeftPaddle = A2(author$project$Main$updatePaddle, model.u, model.A);
 				var shouldBounceVertically = author$project$Main$shouldBallBounceVertically(model.j);
-				var shouldBounce = A2(author$project$Main$shouldBallBounce, model.C, model.j) || A2(author$project$Main$shouldBallBounce, model.z, model.j);
+				var shouldBounce = A2(author$project$Main$shouldBallBounce, model.D, model.j) || A2(author$project$Main$shouldBallBounce, model.A, model.j);
 				var ball = model.j;
-				var horizSpeed = shouldBounce ? (ball.I * (-1)) : ball.I;
+				var horizSpeed = shouldBounce ? (ball.t * (-1)) : ball.t;
 				var vertSpeed = shouldBounceVertically ? (ball.R * (-1)) : ball.R;
 				var updatedBall = _Utils_update(
 					ball,
-					{I: horizSpeed, R: vertSpeed, f: ball.f + horizSpeed, a: ball.a + vertSpeed});
+					{t: horizSpeed, R: vertSpeed, f: ball.f + horizSpeed, a: ball.a + vertSpeed});
 				var _n1 = function () {
 					var _n2 = author$project$Main$maybeWinner(updatedBall);
 					if (_n2.$ === 1) {
-						return _Utils_Tuple3(author$project$Main$NoWinner, model.D, elm$core$Platform$Cmd$none);
+						return _Utils_Tuple3(author$project$Main$NoWinner, model.E, elm$core$Platform$Cmd$none);
 					} else {
 						var player = _n2.a;
-						var updatedScore = A2(author$project$Main$updateScores, model.D, player);
+						var updatedScore = A2(author$project$Main$updateScores, model.E, player);
 						var alwaysSleepDone = elm$core$Basics$always(author$project$Main$SleepDone);
 						var delayCmd = A2(
 							elm$core$Task$perform,
@@ -5830,7 +5830,7 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{j: updatedBall, H: gameStatus, z: updatedLeftPaddle, C: updatedRightPaddle, D: score}),
+						{j: updatedBall, I: gameStatus, A: updatedLeftPaddle, D: updatedRightPaddle, E: score}),
 					cmd);
 			case 1:
 				var playerAction = msg.a;
@@ -5839,25 +5839,25 @@ var author$project$Main$update = F2(
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{w: 0}),
+								{x: 0}),
 							elm$core$Platform$Cmd$none);
 					case 1:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{w: 1}),
+								{x: 1}),
 							elm$core$Platform$Cmd$none);
 					case 2:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{t: 0}),
+								{u: 0}),
 							elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{t: 1}),
+								{u: 1}),
 							elm$core$Platform$Cmd$none);
 				}
 			case 2:
@@ -5867,32 +5867,32 @@ var author$project$Main$update = F2(
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{w: 2}),
+								{x: 2}),
 							elm$core$Platform$Cmd$none);
 					case 1:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{w: 2}),
+								{x: 2}),
 							elm$core$Platform$Cmd$none);
 					case 2:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{t: 2}),
+								{u: 2}),
 							elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{t: 2}),
+								{u: 2}),
 							elm$core$Platform$Cmd$none);
 				}
 			default:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{j: author$project$Main$initBall, H: author$project$Main$NoWinner}),
+						{j: author$project$Main$initBall, I: author$project$Main$NoWinner}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -5998,9 +5998,9 @@ var elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var author$project$Main$view = function (_n0) {
 	var ball = _n0.j;
-	var rightPaddle = _n0.C;
-	var leftPaddle = _n0.z;
-	var score = _n0.D;
+	var rightPaddle = _n0.D;
+	var leftPaddle = _n0.A;
+	var score = _n0.E;
 	return A2(
 		elm$svg$Svg$svg,
 		_List_fromArray(
